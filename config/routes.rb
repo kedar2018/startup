@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   get "/testimonials", to: "pages#testimonials"
   post "request_quote", to: "request_quotes#create"
-
+ post "/contact", to: "contacts#create"   # optional short alias
   # Defines the root path route ("/")
   # root "posts#index"
 end
