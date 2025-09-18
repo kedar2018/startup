@@ -11,6 +11,7 @@ class ContactsController < ApplicationController
       end
     else
       respond_to do |format|
+
         format.html { redirect_back fallback_location: root_path, alert: contact.errors.full_messages.to_sentence }
         format.json { render json: { errors: contact.errors }, status: :unprocessable_entity }
       end

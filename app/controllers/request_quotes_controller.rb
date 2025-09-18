@@ -18,6 +18,8 @@ class RequestQuotesController < ApplicationController
         format.json { render json: { ok: false, errors: rq.errors.full_messages }, status: :unprocessable_entity }
         format.html do
           @request_quote = rq
+         flash.now[:alert] = contact.errors.full_messages.to_sentence
+
           render :new, status: :unprocessable_entity
         end
       end

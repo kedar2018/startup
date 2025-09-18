@@ -222,7 +222,62 @@
   display: block;                       /* avoid extra descender space */
 }
 </style>
+<style>
+.flash-stack {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 10px;
+  z-index: 1050;
+  width: min(92vw, 640px);
+  pointer-events: none; /* clicks pass through except on the toasts */
+}
 
+.flash {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  font-size: 14px;
+  line-height: 1.3;
+  color: #0f172a;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+
+  opacity: 0;
+  transform: translateY(-8px);
+  animation: flash-in 180ms ease-out forwards;
+}
+
+.flash--success { border-color: #22c55e33; background: #f0fdf4; }
+.flash--danger  { border-color: #ef444433; background: #fef2f2; }
+.flash--info    { border-color: #3b82f633; background: #eff6ff; }
+
+.flash__close {
+  border: 0;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+  opacity: .7;
+}
+.flash__close:hover { opacity: 1; }
+
+@keyframes flash-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes flash-out {
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+</style>
 
 </head>
 
@@ -385,6 +440,7 @@
     </div>
   </div>
    -->
+  <%= render "shared/flash" %>
 
   <%=yield%>
 
@@ -525,6 +581,34 @@
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
   })();
+</script>
+<script>
+// app/javascript/flash.js
+function mountFlash() {
+  document.querySelectorAll('[data-flash]').forEach((el) => {
+    const ms = parseInt(el.getAttribute('data-timeout') || '4000', 10);
+
+    // auto-hide after N ms
+    const hideTimer = setTimeout(() => {
+      el.style.animation = (el.style.animation ? el.style.animation + ', ' : '') + 'flash-out 220ms ease-in forwards';
+    }, ms);
+
+    // remove after animation completes
+    el.addEventListener('animationend', (e) => {
+      if (e.animationName === 'flash-out') el.remove();
+    });
+
+    // manual close
+    el.querySelector('.flash__close')?.addEventListener('click', () => {
+      clearTimeout(hideTimer);
+      el.style.animation = (el.style.animation ? el.style.animation + ', ' : '') + 'flash-out 220ms ease-in forwards';
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', mountFlash);
+document.addEventListener('turbo:load', mountFlash); // if using Turbo
+
 </script>
 </body>
 </html>

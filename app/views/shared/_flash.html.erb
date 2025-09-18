@@ -1,0 +1,9 @@
+<div class="flash-stack" aria-live="polite" aria-atomic="true">
+  <% flash.each do |type, message| %>
+    <% next if message.blank? %>
+    <div class="flash <%= flash_class(type) %>" data-flash data-timeout="4000">
+      <span class="flash__msg"><%= message %></span>
+      <button class="flash__close" type="button" aria-label="Close">&times;</button>
+    </div>
+  <% end %>
+</div>
