@@ -1,0 +1,130 @@
+cat > app/assets/stylesheets/theme-overrides.css <<'EOF'
+/* ===== theme-overrides.css =====
+   New color theme (teal primary + warm accent)
+   Drop this file in: app/assets/stylesheets/theme-overrides.css
+   It will override existing styles (loaded after other styles).
+   ================================== */
+
+:root{
+  --primary: #2A9D8F;    /* navbar, primary buttons */
+  --accent:  #E76F51;    /* hover/highlight */
+  --dark-bg: #264653;    /* footer / dark sections */
+  --light-bg:#F4F4F4;    /* page background */
+  --text-dark:#333333;
+  --text-light:#FFFFFF;
+}
+
+/* ---------- Global ---------- */
+body {
+  background-color: var(--light-bg) !important;
+  color: var(--text-dark) !important;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Links */
+a { color: var(--primary) !important; text-decoration: none !important; }
+a:hover, a:focus { color: var(--accent) !important; text-decoration: underline !important; }
+
+/* ---------- Navbar / Header ---------- */
+/* covers common navbar selectors: adjust if your markup uses different class names */
+.navbar,
+header.navbar,
+.site-header,
+.header {
+  background-color: var(--primary) !important;
+  color: var(--text-light) !important;
+}
+
+.navbar a,
+header.navbar a,
+.site-header a,
+.header a {
+  color: var(--text-light) !important;
+}
+
+.navbar a:hover,
+header.navbar a:hover,
+.site-header a:hover,
+.header a:hover {
+  color: var(--accent) !important;
+}
+
+/* If your logo is an <img> inside .navbar-brand, ensure it stays visible:
+   If you use a white logo on primary background, it's OK; otherwise swap images via markup. */
+.navbar-brand img { max-height: 48px; }
+
+/* ---------- Buttons ---------- */
+.btn,
+button,
+input[type="button"],
+input[type="submit"],
+.button {
+  background-color: var(--primary) !important;
+  border: 1px solid var(--primary) !important;
+  color: var(--text-light) !important;
+  padding: 0.5rem 1rem !important;
+  cursor: pointer !important;
+  border-radius: 6px !important;
+}
+
+/* Primary hover: slightly darker */
+.btn:hover,
+button:hover,
+.button:hover,
+input[type="submit"]:hover {
+  filter: brightness(0.92) !important;
+}
+
+/* Secondary / accent button */
+.btn-secondary,
+.button--secondary {
+  background-color: var(--accent) !important;
+  border: 1px solid var(--accent) !important;
+  color: var(--text-light) !important;
+}
+.btn-secondary:hover { filter: brightness(0.92) !important; }
+
+/* ---------- Hero / Banner ---------- */
+/* target common hero selectors */
+.hero, .jumbotron, .banner {
+  background-color: transparent !important;
+  color: var(--text-dark) !important;
+}
+
+/* If hero uses overlay text on an image, ensure headings stand out */
+.hero h1, .jumbotron h1, .banner h1,
+.hero h2, .jumbotron h2, .banner h2 {
+  color: var(--text-dark) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+/* CTA in hero */
+.hero .btn, .jumbotron .btn, .banner .btn {
+  background-color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--text-light) !important;
+}
+
+/* ---------- Footer ---------- */
+footer, .footer, .site-footer {
+  background-color: var(--dark-bg) !important;
+  color: var(--text-light) !important;
+  padding: 2rem 1rem !important;
+}
+footer a, .footer a, .site-footer a {
+  color: var(--accent) !important;
+}
+footer a:hover, .footer a:hover { color: var(--text-light) !important; }
+
+/* ---------- Minor helpers ---------- */
+.text-muted { color: rgba(0,0,0,0.6) !important; }
+.badge { background-color: var(--accent) !important; color: var(--text-light) !important; }
+
+/* Make sure forms still readable */
+input, textarea, select {
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  color: var(--text-dark) !important;
+  background-color: #ffffff !important;
+}
+EOF
+
