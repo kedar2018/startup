@@ -1,4 +1,3 @@
-cat > app/assets/stylesheets/theme-overrides.css <<'EOF'
 /* ===== theme-overrides.css =====
    New color theme (teal primary + warm accent)
    Drop this file in: app/assets/stylesheets/theme-overrides.css
@@ -6,7 +5,7 @@ cat > app/assets/stylesheets/theme-overrides.css <<'EOF'
    ================================== */
 
 :root{
-  --primary: #2A9D8F;    /* navbar, primary buttons */
+  --primary: #2A9D8F !important;    /* navbar, primary buttons */
   --accent:  #E76F51;    /* hover/highlight */
   --dark-bg: #264653;    /* footer / dark sections */
   --light-bg:#F4F4F4;    /* page background */
@@ -126,5 +125,3 @@ input, textarea, select {
   color: var(--text-dark) !important;
   background-color: #ffffff !important;
 }
-EOF
-
