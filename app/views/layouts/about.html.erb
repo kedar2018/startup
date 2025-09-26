@@ -22,10 +22,11 @@
   <!-- Libraries -->
   <link href="/assets/theme/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
   <link href="/assets/theme/lib/animate/animate.min.css" rel="stylesheet" />
-
   <!-- Core CSS -->
   <link href="/assets/theme/bootstrap.min.css" rel="stylesheet" />
-  <link href="/assets/theme/style.css" rel="stylesheet" />
+<link href="/assets/theme-overrides.css" rel="stylesheet" />
+<link href="/assets/theme-overrides.css" rel="stylesheet" /> 
+ <link href="/assets/theme/style.css" rel="stylesheet" />
 
   <!-- Brand Theme (GAYATRI) -->
   <style>
@@ -278,7 +279,6 @@
   to   { opacity: 0; transform: translateY(-8px); }
 }
 </style>
-
 </head>
 
 <body>
@@ -346,40 +346,17 @@
       </div>
     </nav>
 
-    <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img class="w-100" src="<%= asset_path 'theme/carousel-1.jpg' %>" alt="Hero 1" />
-          <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-            <div class="p-3" style="max-width:900px;">
-              <h5 class="text-white text-uppercase mb-3 animated slideInDown">Creative & Innovative</h5>
-              <h1 class="display-1 text-white mb-md-4 animated zoomIn">Creative & Innovative Networking Solution</h1>
-              <a href="/pages/quote" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Free Quote</a>
-              <a href="/pages/contact" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">Contact Us</a>
+<div class="container-fluid bg-primary py-5 bg-header" style="margin-bottom: 90px;">
+            <div class="row py-5">
+                <div class="col-12 pt-lg-5 mt-lg-5 text-center">
+                    <h1 class="display-4 text-white animated zoomIn">About Us</h1>
+                    <a href="/" class="h5 text-white">Home</a>
+                    <i class="far fa-circle text-white px-2"></i>
+                    <a href="/pages/about" class="h5 text-white">About</a>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="carousel-item">
-          <img class="w-100" src="<%= asset_path 'theme/carousel-2.jpg' %>" alt="Hero 2" />
-          <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-            <div class="p-3" style="max-width:900px;">
-              <h5 class="text-white text-uppercase mb-3 animated slideInDown">Creative & Innovative</h5>
-              <h1 class="display-1 text-white mb-md-4 animated zoomIn">Creative & Innovative Networking Solution</h1>
-              <a href="/pages/quote" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Free Quote</a>
-              <a href="/pages/contact" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">Contact Us</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
+
   </div>
 
   <!-- Search Modal -->
