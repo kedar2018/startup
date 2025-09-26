@@ -77,3 +77,4 @@ gem 'pundit'
 gem "sassc-rails", ">= 2.1.2"
 # make sure you also have:
 #gem "sprockets-rails"
+gem "image_processing", "~> 1.12"
