@@ -24,6 +24,7 @@ class PagesController < ApplicationController
   end
 
   def blog
+   @blogs = Blog.all
   end
 
   def detail
