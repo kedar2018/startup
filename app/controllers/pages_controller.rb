@@ -28,6 +28,8 @@ class PagesController < ApplicationController
   end
 
   def detail
+   @service = Service.find_by_title(params[:id])
+    render layout: "about" 
   end
 
   def feature

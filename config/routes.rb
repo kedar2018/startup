@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'pages/price'
   get 'pages/contact'
   get 'pages/blog'
-  get 'pages/detail'
+  get "pages/detail/:id", to: "pages#detail"
   get 'pages/feature'
   get 'pages/quote'
   get 'pages/service'
