@@ -1,0 +1,26 @@
+<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-12">
+                    <!-- Blog Detail Start -->
+                    <div class="mb-5">
+                        <img class="img-fluid w-100 rounded mb-5" src="img/blog-1.jpg" alt="">
+                        <%=image_tag url_for(@product.image.variant(resize_to_limit: [800, 800]))%> 
+
+                        <h1 class="mb-4"><%=@product.title%></h1>
+                        <p>
+                           <%=@product.description%> 
+                        </p>
+                         <p>
+                           <%=@product.content%> 
+                        </p>
+                    </div>
+                    <!-- Blog Detail End -->
+    
+                
+                </div>
+    
+            
+            </div>
+        </div>
+    </div>

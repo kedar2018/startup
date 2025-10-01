@@ -14,6 +14,14 @@ class PagesController < ApplicationController
     @services = Service.all
   end
 
+  def products
+    @products = Product.all
+  end
+
+  def product_detail
+    @product = Product.find_by_title(params[:id])
+  end
+
   def team
   end
 
