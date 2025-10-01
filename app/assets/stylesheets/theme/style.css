@@ -11,7 +11,7 @@
 .spinner {
     width: 40px;
     height: 40px;
-    background: var(--primary);
+    background: var(--logo-color);
     margin: 100px auto;
     -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
     animation: sk-rotateplane 1.2s infinite ease-in-out;
@@ -129,7 +129,7 @@ h6,
     position: relative;
     margin-left: 25px;
     padding: 35px 0;
-    color: #FFFFFF;
+    color: var(--logo-color);;
     font-size: 18px;
     font-weight: 600;
     outline: none;
@@ -257,7 +257,7 @@ h6,
     height: 5px;
     left: 0;
     bottom: 0;
-    background: var(--primary);
+    background: var(--logo-color);
     border-radius: 2px;
 }
 
@@ -325,13 +325,14 @@ h6,
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--primary);
+    background: var(--logo-color);
     border-radius: 2px;
     transform: rotate(-45deg);
 }
 
 .service-item .service-icon i {
     transform: rotate(45deg);
+    color: #fff;
 }
 
 .service-item a.btn {

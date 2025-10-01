@@ -1,0 +1,303 @@
+/* ===========================
+   Brand / Primary color = LOGO RED
+   =========================== */
+:root{
+  --logo-color: #C4212D;            /* sampled from your logo */
+  --logo-color-rgb: 196,33,45;
+  --logo-color-600: #AC1D28;        /* hover / darker */
+  --logo-color-700: #8F1821;        /* active / darkest */
+  --logo-subtle-bg: #FBE9EB;        /* very light red background */
+  --logo-subtle-bg-hover: #F4D6D9;
+
+  /* Make Bootstrap components pick it up automatically */
+  --bs-primary: var(--logo-color);
+  --bs-primary-rgb: var(--logo-color-rgb);
+}
+
+/* Text & links */
+.text-primary { color: var(--logo-color) !important; }
+a.text-primary:hover,
+.text-primary:hover { color: var(--logo-color-600) !important; }
+
+.link-primary { color: var(--logo-color) !important; }
+.link-primary:hover, .link-primary:focus { color: var(--logo-color-600) !important; }
+.btn-link { color: var(--logo-color); }
+.btn-link:hover, .btn-link:focus { color: var(--logo-color-600); }
+
+/* Backgrounds / borders / badges */
+.bg-primary    { background-color: var(--logo-color) !important; }
+.border-primary{ border-color: var(--logo-color) !important; }
+.badge.bg-primary { background-color: var(--logo-color) !important; }
+
+/* Buttons */
+.btn-primary{
+  color:#fff;                                  /* keep theme contrast style */
+  background-color: var(--logo-color);
+  border-color: var(--logo-color);
+}
+.btn-primary:hover{
+  color:#000;
+  background-color: var(--logo-color-600);
+  border-color: var(--logo-color-600);
+}
+.btn-primary:focus,
+.btn-primary.focus{
+  color:#000;
+  background-color: var(--logo-color-600);
+  border-color: var(--logo-color-600);
+  box-shadow: 0 0 0 .25rem rgba(var(--logo-color-rgb), .5);
+}
+.btn-primary:active,
+.btn-primary.active,
+.show > .btn-primary.dropdown-toggle{
+  color:#000;
+  background-color: var(--logo-color-700);
+  border-color: var(--logo-color-700);
+}
+.btn-primary:disabled,
+.btn-primary.disabled{
+  color:#000;
+  background-color: var(--logo-color);
+  border-color: var(--logo-color);
+}
+
+/* Outline buttons */
+.btn-outline-primary{
+  color: var(--logo-color);
+  border-color: var(--logo-color);
+}
+.btn-outline-primary:hover{
+  color:#000;
+  background-color: var(--logo-color);
+  border-color: var(--logo-color);
+}
+.btn-outline-primary:focus{
+  box-shadow: 0 0 0 .25rem rgba(var(--logo-color-rgb), .5);
+}
+.btn-outline-primary:active,
+.btn-outline-primary.active,
+.show > .btn-outline-primary.dropdown-toggle{
+  color:#000;
+  background-color: var(--logo-color-700);
+  border-color: var(--logo-color-700);
+}
+
+/* Forms & focus rings */
+.form-control:focus{
+  border-color: #E59AA2; /* subtle red border */
+  box-shadow: 0 0 0 .25rem rgba(var(--logo-color-rgb), .25);
+}
+.form-check-input:focus{
+  border-color:#E59AA2;
+  box-shadow: 0 0 0 .25rem rgba(var(--logo-color-rgb), .25);
+}
+.form-check-input:checked{
+  background-color: var(--logo-color);
+  border-color: var(--logo-color);
+}
+.form-range::-webkit-slider-thumb{ background-color: var(--logo-color); }
+.form-range::-moz-range-thumb{ background-color: var(--logo-color); }
+.form-range:focus::-webkit-slider-thumb{ box-shadow: 0 0 0 1px #fff, 0 0 0 .25rem rgba(var(--logo-color-rgb), .25); }
+.form-range:focus::-moz-range-thumb{ box-shadow: 0 0 0 1px #fff, 0 0 0 .25rem rgba(var(--logo-color-rgb), .25); }
+.btn-close:focus{ box-shadow: 0 0 0 .25rem rgba(var(--logo-color-rgb), .25); }
+
+/* Navs / Pills / Pagination */
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link{
+  background-color: var(--logo-color);
+}
+.page-item.active .page-link{
+  background-color: var(--logo-color);
+  border-color: var(--logo-color);
+}
+.page-link:focus{
+  box-shadow: 0 0 0 .25rem rgba(var(--logo-color-rgb), .25);
+}
+
+/* Accordion (opened state) */
+.accordion-button:not(.collapsed){
+  color: var(--logo-color-600);
+  background-color: var(--logo-subtle-bg);
+}
+.accordion-button:focus{
+  border-color:#E59AA2;
+  box-shadow: 0 0 0 .25rem rgba(var(--logo-color-rgb), .25);
+}
+
+/* Alerts */
+.alert-primary{
+  color:#7A1720;
+  background-color: #F9DDE0;
+  border-color:#F0C7CC;
+}
+.alert-primary .alert-link{ color:#5E111A; }
+
+/* Tables (primary contextual row) */
+.table-primary{
+  --bs-table-bg: #F9DDE0;
+  --bs-table-striped-bg: #F0D4D7;
+  --bs-table-striped-color: #000;
+  --bs-table-active-bg: #E6C8CB;
+  --bs-table-active-color: #000;
+  --bs-table-hover-bg: #F3D9DC;
+  --bs-table-hover-color: #000;
+  color:#000;
+  border-color:#E6C8CB;
+}
+
+/* Progress bars */
+.progress-bar{ background-color: var(--logo-color); }
+
+/* List group active item */
+.list-group-item.active{
+  background-color: var(--logo-color);
+  border-color: var(--logo-color);
+}
+
+/* Utilities */
+.text-bg-primary{ background-color: var(--logo-color) !important; color:#fff !important; }
+.outline-primary{ outline-color: rgba(var(--logo-color-rgb), .5); }
+
+/* only affect images that have Bootstrap shadow helpers */
+img.shadow, img.shadow-sm, img.shadow-lg {
+  box-shadow: none !important;
+}
+
+/* if it's using the thumbnail style (adds a faint border/shadow) */
+.img-thumbnail {
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* only affect images that have Bootstrap shadow helpers */
+img.shadow, img.shadow-sm, img.shadow-lg {
+  box-shadow: none !important;
+}
+
+/* if it's using the thumbnail style (adds a faint border/shadow) */
+.img-thumbnail {
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+
+/* ===== HERO CAPTION: light/white overlay & dependent tweaks ===== */
+
+/* Brighter white overlay on the caption */
+.carousel-caption {
+  background: rgba(255, 255, 255, 0.92) !important; /* brighter white */
+  color: var(--dark) !important;                     /* readable on white */
+  text-shadow: none !important;
+  backdrop-filter: saturate(130%) blur(1px);         /* subtle clarity on busy photos */
+}
+
+/* Ensure heading/body text renders dark on the white panel */
+.carousel-caption h1,
+.carousel-caption h2,
+.carousel-caption h3,
+.carousel-caption h4,
+.carousel-caption h5,
+.carousel-caption p,
+.carousel-caption .lead {
+  color: var(--dark) !important;
+}
+
+/* Buttons inside the caption: solid fills for contrast */
+.carousel-caption .btn-primary {
+  background-color: var(--logo-color) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.carousel-caption .btn-secondary {
+  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
+  color: #fff !important;
+}
+
+/* If you used outline/light buttons in the caption, make them readable */
+.carousel-caption .btn-outline-light,
+.carousel-caption .btn-light {
+  color: #fff !important;
+  border-color:  var(--primary) !important;
+  background: var(--logo-color);
+}
+.carousel-caption .btn-outline-light:hover,
+.carousel-caption .btn-light:hover {
+  background: var(--logo-color) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* Links inside caption should use your primary brand color */
+.carousel-caption a {
+  color: var(--primary) !important;
+}
+.carousel-caption a:hover {
+  color: #0582ae !important; /* slightly darker hover */
+}
+
+/* Indicators: make sure they stay visible over a lighter hero */
+.carousel .carousel-indicators [data-bs-target] {
+  background-color: var(--dark);
+  opacity: 0.35;
+}
+.carousel .carousel-indicators .active {
+  opacity: 0.75;
+}
+
+/* ===== Optional: if your navbar sits over the hero and needs dark text,
+   add class "has-light-hero" on <body> to switch navbar to a light style only here. ===== */
+.has-light-hero .navbar-dark { background:  #fff; border-bottom-color: rgba(9,30,62,.08); }
+.has-light-hero .navbar-dark .navbar-nav .nav-link { color: var(--dark); }
+.has-light-hero .navbar-dark .navbar-brand h1 { color: var(--primary); }
+@media (min-width: 992px) {
+  .has-light-hero .navbar-dark .navbar-nav .nav-link::before { background: var(--primary); }
+}
+
+/* === Transparent hero caption (no overlay) === */
+.carousel-caption {
+  background: transparent !important;
+  color: #fff !important;                      /* readable on imagery */
+  text-shadow: 0 2px 8px rgba(0,0,0,.45) !important;
+  backdrop-filter: none !important;
+}
+
+/* Ensure all caption text is white */
+.carousel-caption h1,
+.carousel-caption h2,
+.carousel-caption h3,
+.carousel-caption h4,
+.carousel-caption h5,
+.carousel-caption p,
+.carousel-caption .lead {
+  color: #fff !important;
+}
+
+/* Links: white by default, brand color on hover */
+.carousel-caption a { 
+  color: #fff !important; 
+  border-bottom: 1px solid rgba(255,255,255,.35);
+}
+.carousel-caption a:hover { 
+  color: var(--primary) !important; 
+  border-bottom-color: var(--primary);
+}
+
+/* Indicators: visible over photos */
+.carousel .carousel-indicators [data-bs-target] { 
+  background-color: #fff; 
+  opacity: .6; 
+}
+.carousel .carousel-indicators .active { 
+  opacity: 1; 
+}
+
+/* Optional: if a specific text block still needs help,
+   wrap it in a .caption-glow container */
+.caption-glow {
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0)) !important;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
