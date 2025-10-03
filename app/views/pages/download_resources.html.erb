@@ -10,7 +10,7 @@
 
       <% if r.file.attached? %>
         <p class="resource-download">
-          <%= link_to "Download (#{r.file.filename})",
+          <%= link_to "Download",
                       url_for(r.file),
                       class: "btn btn-sm btn-primary",
                       target: "_blank", rel: "noopener" %>

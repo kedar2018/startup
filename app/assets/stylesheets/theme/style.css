@@ -491,3 +491,16 @@ h6,
         margin-bottom: -75px;
     }
 }
+
+
+
+.background-overlay {
+    background-image: url("/assets/section-background-3.webp");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.75;
+    mix-blend-mode: multiply;
+    transition: background 0.3s, border-radius 0.3s, opacity 0.3s;
+}
+
