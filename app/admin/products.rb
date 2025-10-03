@@ -1,69 +1,40 @@
 # app/admin/products.rb
 ActiveAdmin.register Product do
-  menu priority: 20, label: "Products"
+  permit_params :title, :description, :content, :image, :attachment
 
-  permit_params :title, :description, :content, :attachment, :image
-
-  # Filters
-  filter :title
+  remove_filter :image_attachment, :image_blob, :attachment_attachment, :attachment_blob
+filter :title
   filter :created_at
 
-  # Index
-  index do
-    selectable_column
-    id_column
-    column :title
-    column :description
-    column "Image" do |p|
-      if p.image.attached?
-        image_tag url_for(p.image.variant(resize_to_limit: [80, 80])), style: "border-radius:6px;"
-      end
-    end
-    column :created_at
-    actions
-  end
-
-  # Show page
-  show do
-    attributes_table do
-      row :id
-      row :title
-      row :description
-      row :content do |p|
-        pre p.content
-      end
-      row :image do |p|
-        if p.image.attached?
-          image_tag url_for(p.image.variant(resize_to_limit: [800, 800]))
-        else
-          status_tag "No Image", :warning
-        end
-      end
-      row :attachment do |p|
-        if p.attachment.attached?
-          link_to p.attachment.filename.to_s, url_for(p.attachment), target: "_blank", rel: "noopener"
-        else
-          status_tag "No Attachment", :warning
-        end
-      end
-      row :created_at
-      row :updated_at
-    end
-    active_admin_comments
-  end
-
-  # Form
   form html: { multipart: true } do |f|
     f.semantic_errors
-    f.inputs "Product Details" do
+    f.inputs "Product" do
       f.input :title
       f.input :description
-      f.input :content, as: :text, input_html: { rows: 8 }
-      f.input :image, as: :file, hint: (image_tag url_for(f.object.image) if f.object.image.attached?)
-      f.input :attachment, as: :file, hint: (link_to f.object.attachment.filename, url_for(f.object.attachment) if f.object.attachment.attached?)
+      # CKEditor here
+      f.input :content, as: :text, input_html: { class: "js-ck", rows: 12 }
+
+      f.input :image, as: :file,
+        hint: (image_tag url_for(f.object.image), style: "max-width:140px" if f.object.image.attached?)
+      f.input :attachment, as: :file,
+        hint: (link_to f.object.attachment.filename, url_for(f.object.attachment) if f.object.attachment.attached?)
     end
     f.actions
   end
 
-  # Strong params are handled by permit_params above; no custom controller needed.
+  show do
+    attributes_table do
+      row :title
+      row :description
+      row :content do |p|
+        # Render HTML from the editor safely
+        sanitize(p.content,
+          tags: %w[p br h1 h2 h3 h4 h5 h6 b strong i em u s a ul ol li blockquote code pre span div table thead tbody tr th td img],
+          attributes: %w[href target rel class style src alt])
+      end
+      row(:image)      { |p| image_tag url_for(p.image) if p.image.attached? }
+      row(:attachment) { |p| link_to p.attachment.filename, url_for(p.attachment) if p.attachment.attached? }
+    end
+    active_admin_comments
+  end
 end

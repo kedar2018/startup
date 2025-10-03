@@ -5,12 +5,13 @@ class Product < ApplicationRecord
 
   validates :title, presence: true, length: { maximum: 255 }
 
-  # Required for ActiveAdmin/Ransack allowlisting
-  def self.ransackable_attributes(_auth_object = nil)
+  def self.ransackable_attributes(_ = nil)
     %w[id title description content created_at updated_at]
   end
 
-  def self.ransackable_associations(_auth_object = nil)
-    [] # no associations to search
+  # 👇 allow Active Storage associations for filters/search
+  def self.ransackable_associations(_ = nil)
+    %w[image_attachment image_blob attachment_attachment attachment_blob]
   end
+
 end
