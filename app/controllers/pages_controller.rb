@@ -7,8 +7,14 @@ class PagesController < ApplicationController
 
   def about
     @about_us = About.first
- render layout: "about" 
+    render layout: "about" 
   end
+
+  def download_resources
+    @resources = Resource.all
+  end
+
+
 
   def services
     @services = Service.all

@@ -1,0 +1,56 @@
+<!-- views/resources/index.html.erb -->
+<div class="resources-grid">
+  <% @resources.each do |r| %>
+    <article class="resource-card">
+      <h2 class="resource-title">
+        <%= link_to r.title ,"#" %>
+      </h2>
+
+      <p class="resource-date"><%= r.created_at.strftime("%d %b %Y") %></p>
+
+      <% if r.file.attached? %>
+        <p class="resource-download">
+          <%= link_to "Download (#{r.file.filename})",
+                      url_for(r.file),
+                      class: "btn btn-sm btn-primary",
+                      target: "_blank", rel: "noopener" %>
+        </p>
+      <% end %>
+
+      <div class="resource-excerpt">
+        <%= sanitize(
+              truncate(strip_tags(r.description.to_s), length: 220),
+              tags: %w[], attributes: %w[]
+            ) %>
+      </div>
+    </article>
+  <% end %>
+</div>
+<style>
+/* app/assets/stylesheets/resources.scss */
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+.resource-card {
+  border: 1px solid #e5e7eb; /* light gray */
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  background: #fff;
+}
+.resource-title { margin: 0 0 .25rem; }
+.resource-date  { color: #6b7280; margin: 0 0 .75rem; font-size: .9rem; }
+.resource-excerpt { color: #374151; }
+.file-meta { margin-left: .5rem; color: #6b7280; font-size: .9rem; }
+/* app/assets/stylesheets/resources.scss */
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* exactly 2 per row */
+  gap: 1.25rem;
+}
+@media (max-width: 768px) {
+  .resources-grid { grid-template-columns: 1fr; } /* 1 per row on mobile */
+}
+
+</style>
