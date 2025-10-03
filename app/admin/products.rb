@@ -12,7 +12,7 @@ filter :title
       f.input :title
       f.input :description
       # CKEditor here
-      f.input :content, as: :text, input_html: { class: "js-ck", rows: 12 }
+      f.input :content, as: :text, input_html: { class: "js-ck", rows: 16 }
 
       f.input :image, as: :file,
         hint: (image_tag url_for(f.object.image), style: "max-width:140px" if f.object.image.attached?)

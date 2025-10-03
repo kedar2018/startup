@@ -1,0 +1,110 @@
+<!-- app/views/layouts/active_admin_custom.html.erb -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "active_admin", media: "all" %>
+  <%= javascript_include_tag "active_admin" %>
+  <meta name="aa-layout" content="custom">
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/ckeditor.js"></script>
+<style>
+  .ck-editor__editable[role="textbox"] { min-height: 520px; }
+  .ck-content { font-size: 16px; }
+</style>
+
+<script>
+  function csrfToken() {
+    const t = document.querySelector('meta[name="csrf-token"]');
+    return t && t.content;
+  }
+
+  function initCkEditors(scope){
+    const root  = scope || document;
+    const nodes = root.querySelectorAll('textarea.js-ck:not([data-cked])');
+    if (!nodes.length || !window.CKEDITOR || !CKEDITOR.ClassicEditor) return;
+
+    nodes.forEach(function(el){
+      if (el.dataset.cked === '1') return;
+
+      CKEDITOR.ClassicEditor.create(el, {
+        toolbar: {
+          items: [
+            'undo','redo','|','findAndReplace','selectAll','removeFormat','|',
+            'heading','|',
+            'bold','italic','underline','strikethrough','code','subscript','superscript','|',
+            'fontSize','fontFamily','fontColor','fontBackgroundColor','highlight','|',
+            'link','insertTable','imageUpload','mediaEmbed','horizontalLine','pageBreak','specialCharacters','|',
+            'bulletedList','numberedList','todoList','|',
+            'outdent','indent','alignment','|',
+            'blockQuote','codeBlock'
+          ],
+          shouldNotGroupWhenFull: true
+        },
+
+        heading: {
+          options: [
+            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+            { model: 'heading1',  view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+            { model: 'heading2',  view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+            { model: 'heading3',  view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+            { model: 'heading4',  view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' }
+          ]
+        },
+
+        list: { properties: { styles: true, startIndex: true, reversed: true } },
+        link: { decorators: { addTargetToExternalLinks: true } },
+        fontSize: { options: [10,12,14,'default',18,20,24,30,36] },
+        htmlSupport: { allow: [ { name: /.*/, attributes: true, classes: true, styles: true } ] },
+        htmlEmbed: { showPreviews: true },
+
+        simpleUpload: {
+          uploadUrl: '/admin/uploads',
+          headers: { 'X-CSRF-Token': csrfToken() }
+        },
+
+        // REMOVE ALL cloud/commercial plugins so nothing requires CloudServices
+        removePlugins: [
+          // Cloud / storage / upload suites
+          'CloudServices',
+          'CKBox','CKBoxUtils','CKBoxImageEdit',
+          'CKFinder','CKFinderUploadAdapter','EasyImage',
+
+          // Collaboration / paywalled
+          'RealTimeCollaborativeComments','RealTimeCollaborativeTrackChanges','RealTimeCollaborativeRevisionHistory',
+          'PresenceList','Comments','TrackChanges','TrackChangesData','RevisionHistory',
+
+          // Export/import paywalled
+          'ExportPdf','ExportWord','ImportWord',
+
+          // Premium UX features that trigger license errors
+          'AIAssistant','MultiLevelList','TableOfContents','FormatPainter','Template',
+          'SlashCommand','PasteFromOfficeEnhanced','CaseChange','WProofreader','MathType','Pagination',
+
+          // Needs dedicated container; remove unless you wire it
+          'DocumentOutline','DocumentOutlineUI'
+        ]
+      })
+      .then(function(){ el.dataset.cked = '1'; })
+      .catch(function(e){ console.error('CKEditor init error:', e); });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){ initCkEditors(document); });
+  if (window.jQuery) {
+    jQuery(document).on('pjax:complete has_many_add:after', function(_e, c){
+      initCkEditors((c && c[0]) || document);
+    });
+  }
+  document.addEventListener('turbo:load', function(){ initCkEditors(document); });
+  document.addEventListener('page:load',  function(){ initCkEditors(document); });
+</script>
+
+</head>
+<body class="<%= controller.try(:body_classes) || '' %>">
+
+  <%= yield %>
+</body>
+</html>

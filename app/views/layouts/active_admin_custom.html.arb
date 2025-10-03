@@ -1,0 +1,33 @@
+# app/views/layouts/active_admin_custom.html.arb
+doctype html
+html lang: I18n.locale do
+  head do
+    active_admin_head
+    script src: "https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"
+    script do
+      raw %(
+        function initCkEditors(scope){
+          var root = scope || document;
+          var nodes = root.querySelectorAll('textarea.js-ck:not([data-cked])');
+          if (!nodes.length || !window.ClassicEditor) return;
+          nodes.forEach(function(el){
+            if (el.dataset.cked === '1') return;
+            ClassicEditor.create(el).then(function(){ el.dataset.cked = '1'; })
+              .catch(function(e){ console.error('CKEditor init error:', e); });
+          });
+        }
+        document.addEventListener('DOMContentLoaded', function(){ initCkEditors(document); });
+        if (window.jQuery) {
+          jQuery(document).on('pjax:complete has_many_add:after', function(_e, c){
+            initCkEditors((c && c[0]) || document);
+          });
+        }
+        document.addEventListener('turbo:load', function(){ initCkEditors(document); });
+        document.addEventListener('page:load',  function(){ initCkEditors(document); });
+      )
+    end
+  end
+  body class: body_classes do
+    text_node yield
+  end
+end
