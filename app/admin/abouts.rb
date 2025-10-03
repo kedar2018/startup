@@ -44,7 +44,8 @@ ActiveAdmin.register About do
     f.inputs "About Details" do
       f.input :title
       f.input :description, as: :text, input_html: { rows: 4 }
-      f.input :content,     as: :text, input_html: { rows: 10 }
+    #  f.input :content,     as: :text, input_html: { rows: 10 }
+      f.input :content, as: :text, input_html: { class: "js-ck", rows: 16 }
     end
     f.actions
   end
