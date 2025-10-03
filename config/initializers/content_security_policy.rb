@@ -23,3 +23,5 @@
 #   # Report violations without enforcing the policy.
 #   # config.content_security_policy_report_only = true
 # end
+# config/initializers/content_security_policy.rb
+#policy.script_src :self, :https, "https://cdn.ckeditor.com"
