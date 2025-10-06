@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'pages/contact'
   get 'pages/blog'
   get "pages/detail/:id", to: "pages#detail"
+  get "pages/blog_detail/:id", to: "pages#blog_detail"
   get 'pages/feature'
   get 'pages/quote'
   get 'pages/service'

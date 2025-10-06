@@ -41,6 +41,11 @@ class PagesController < ApplicationController
    @blogs = Blog.all
   end
 
+  def blog_detail
+    @blog = Blog.find_by_title(params[:id])
+    render layout: "about" 
+  end
+
   def detail
    @service = Service.find_by_title(params[:id])
     render layout: "about" 
