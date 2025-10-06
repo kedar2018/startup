@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get "/testimonials", to: "pages#testimonials"
   post "request_quote", to: "request_quotes#create"
  post "/contact", to: "contacts#create"   # optional short alias
+get "/search", to: "search#index", as: :search
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
