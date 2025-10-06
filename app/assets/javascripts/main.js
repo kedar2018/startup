@@ -96,31 +96,56 @@
             }
         }
     });
+/*
+$('.vendor-carousel').owlCarousel({
+  loop: true,
+  margin: 45,
+  dots: false,
+  autoplay: true,
+  autoplayTimeout: 2000,   // every 2s
+  smartSpeed: 400,         // 0.4s transition
+  responsive: { 0:{items:2}, 576:{items:4}, 768:{items:6}, 992:{items:8} }
+});
+*/
+/*$('.vendor-carousel').owlCarousel({
+  loop: true,
+  margin: 45,
+  dots: false,
+  autoplay: true,
+  autoplayTimeout: 1000,   // short interval
+  smartSpeed: 1000,        // match timeout for steady motion
+  responsive: { 0:{items:2}, 576:{items:4}, 768:{items:6}, 992:{items:8} }
+});
+*/
+// make motion linear (add once)
+//$('.vendor-carousel .owl-stage').css('transition-timing-function', 'linear');
 
+/*
+$('.vendor-carousel').owlCarousel({
+  loop: true,
+  autoplay: true,
 
-    // Vendor carousel
-    $('.vendor-carousel').owlCarousel({
-        loop: true,
-        margin: 45,
-        dots: false,
-        loop: true,
-        autoplay: true,
-        smartSpeed: 1000,
-        responsive: {
-            0:{
-                items:2
-            },
-            576:{
-                items:4
-            },
-            768:{
-                items:6
-            },
-            992:{
-                items:8
-            }
-        }
-    });
-    
+  // key combo for continuous motion:
+  autoplayTimeout: 1,     // fire next slide almost immediately
+  smartSpeed: 1000,       // how long each move takes
+  autoplaySpeed: 1000,    // match the transition speed
+  slideBy: 1,             // move one item at a time
+
+  // optional (reduces accidental interruptions)
+  mouseDrag: false,
+  touchDrag: false,
+  pullDrag: false,
+
+  margin: 45,             // set 0 if you want a seamless band
+  dots: false,
+  nav: false,
+  responsive: {
+    0:   { items: 2 },
+    576: { items: 4 },
+    768: { items: 6 },
+    992: { items: 8 }
+  }
+});
+*/
 })(jQuery);
 

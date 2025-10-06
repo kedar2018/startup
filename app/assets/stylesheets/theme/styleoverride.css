@@ -39,6 +39,7 @@ a.text-primary:hover,
   color:#000;
   background-color: var(--logo-color-600);
   border-color: var(--logo-color-600);
+  box-shadow:  0 0 0 .25rem rgba(var(--logo-color-rgb), .5);
 }
 .btn-primary:focus,
 .btn-primary.focus{
@@ -300,4 +301,8 @@ img.shadow, img.shadow-sm, img.shadow-lg {
   background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0)) !important;
   border-radius: 8px;
   padding: 1rem 1.25rem;
+}
+
+.btnsearch{
+   var(--logo-color) !important;
 }

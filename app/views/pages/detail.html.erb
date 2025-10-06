@@ -9,7 +9,15 @@
                         <p>
 				<%=@service.description%>
 			</p>
-                    </div>
+<p>
+	<%= @service.content.present? ?
+          sanitize(@service.content,
+                   tags: %w[p br strong em a ul ol li h2 h3 h4 blockquote img],
+                   attributes: %w[href target rel src alt]) :
+          content_tag(:span, "—", class: "text-muted") %>
+
+   </p>
+                 </div>
                     <!-- Blog Detail End -->
     
                     <!-- Comment List Start -->
