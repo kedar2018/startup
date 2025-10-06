@@ -13,12 +13,21 @@
                         <div class="service-icon" style="transform: rotate(0deg);">
                             <%#=image_tag url_for(product.image.variant(resize_to_limit: [80, 80]))%>
                         </div>-->
-			  <div class="service-icon"><i class="<%="#{product.icon_style} fa-#{product.icon_name} fa-lg"%>"></i></div>
-                        <h4 class="mb-3"><%=product.title%></h4>
-                        <p class="m-0"><%=product.description%></p>
-                        <a class="btn btn-lg btn-primary rounded" href="/pages/product_detail/<%=product.title%>">
+			  <div class="service-icon"><i class="<%="#{product.icon_style} fa-#{product.icon_name} fa-lg"%>"></i>
+              </div>
+                                <%stitle =  strip_tags(product.title.to_s)%>
+
+                        <h4 class="mb-3"><%= stitle.truncate(25, separator: ' ') %></h4>
+                         <% text = strip_tags(product.description.to_s) %>
+
+                        <p class="m-0"> <%= text.truncate(100, separator: ' ') %>
+              
+                     <a class="btn btn-lg btn-primary rounded" href="/pages/product_detail/<%=product.title%>">
                             <i class="bi bi-arrow-right"></i>
                         </a>
+                 
+             </p>
+                      
                     </div>
                 </div>
 		<%end%>
