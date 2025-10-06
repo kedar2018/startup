@@ -126,144 +126,260 @@
   </style>
  <script>
     (function () {
-      var ICONS_JSON = "https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@5.15.4/metadata/icons.json";
 
-      function fetchIcons(){ return fetch(ICONS_JSON, { cache: "force-cache" }).then(r => r.json()); }
+  /* =========================================================
+     Config (CDNs)
+  ========================================================= */
+  var FA_CSS    = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css";
+  var ICONS_JSON= "https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@5.15.4/metadata/icons.json";
+  var CK_SRC    = "https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js";
 
-      function openIconPicker(opts) {
-        var onPick = opts.onPick;
-        var currentStyle = opts.currentStyle || "fas";
+  /* =========================================================
+     Utilities
+  ========================================================= */
+  function ensureStylesheet(href) {
+    for (var i = 0; i < document.styleSheets.length; i++) {
+      if (document.styleSheets[i].href && document.styleSheets[i].href.indexOf(href) >= 0) return;
+    }
+    var l = document.createElement("link");
+    l.rel = "stylesheet";
+    l.href = href;
+    l.crossOrigin = "anonymous";
+    l.referrerPolicy = "no-referrer";
+    document.head.appendChild(l);
+  }
 
-        var backdrop = document.createElement("div");
-        backdrop.className = "aa-icon-modal-backdrop";
-        var modal = document.createElement("div");
-        modal.className = "aa-icon-modal";
-        backdrop.appendChild(modal);
+  function injectPickerStyles() {
+    if (document.getElementById("aa-icon-picker-styles")) return;
+    var css = `
+      .aa-icon-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10000;display:flex;align-items:center;justify-content:center}
+      .aa-icon-modal{background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);width:min(980px,90vw);max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+      .aa-icon-modal header{padding:.75rem 1rem;border-bottom:1px solid #e5e7eb;display:flex;gap:.75rem;align-items:center}
+      .aa-icon-modal header input{flex:1;min-width:0}
+      .aa-icon-grid{padding:10px;overflow:auto}
+      .aa-icon-grid .aa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+      .aa-icon-card{border:1px solid #e5e7eb;border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;background:#fff}
+      .aa-icon-card:hover{background:#f8fafc}
+      .aa-icon-name{font-size:12px;color:#475569;text-align:center;word-break:break-word}
+      .aa-chip{font-size:11px;border:1px solid #e5e7eb;border-radius:999px;padding:2px 8px;background:#f1f5f9;color:#334155}
+      .aa-empty{padding:2rem;color:#64748b;text-align:center}
+      .aa-btn{appearance:none;border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:.4rem .7rem;cursor:pointer}
+    `;
+    var s = document.createElement("style");
+    s.id = "aa-icon-picker-styles";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
 
-        modal.innerHTML = '\
-          <header>\
-            <strong style="white-space:nowrap">Choose an icon</strong>\
-            <input type="search" class="aa-search form-control" placeholder="Search icons (e.g. user, shield, android)…" />\
-            <select class="aa-style form-select" style="width:auto;max-width:160px">\
-              <option value="fas"' + (currentStyle==="fas"?" selected":"") + '>Solid</option>\
-              <option value="far"' + (currentStyle==="far"?" selected":"") + '>Regular</option>\
-              <option value="fab"' + (currentStyle==="fab"?" selected":"") + '>Brands</option>\
-            </select>\
-            <button class="aa-btn" data-action="close">Close</button>\
-          </header>\
-          <div class="aa-icon-grid">\
-            <div class="aa-grid"></div>\
-            <div class="aa-empty d-none">No icons match your search.</div>\
-          </div>\
-          <div class="aa-modal-footer"><small class="text-muted">Font Awesome 5 Free</small></div>';
+  function fetchIconsMeta() {
+    return fetch(ICONS_JSON, { cache: "force-cache" }).then(function(r){ return r.json(); });
+  }
 
-        document.body.appendChild(backdrop);
+  /* =========================================================
+     Icon Picker Modal
+  ========================================================= */
+  function openIconPicker(opts) {
+    var onPick = opts && opts.onPick;
+    var currentStyle = (opts && opts.currentStyle) || "fas";
 
-        var search = modal.querySelector(".aa-search");
-        var styleSel = modal.querySelector(".aa-style");
-        var grid = modal.querySelector(".aa-grid");
-        var empty = modal.querySelector(".aa-empty");
+    var backdrop = document.createElement("div");
+    backdrop.className = "aa-icon-modal-backdrop";
+    var modal = document.createElement("div");
+    modal.className = "aa-icon-modal";
+    backdrop.appendChild(modal);
 
-        var all = [], view = [];
+    modal.innerHTML = ''
+      + '<header>'
+      + '  <strong style="white-space:nowrap">Choose an icon</strong>'
+      + '  <input type="search" class="aa-search" placeholder="Search (e.g. user, shield, android)…" />'
+      + '  <select class="aa-style" style="width:auto;max-width:160px">'
+      + '    <option value="fas"' + (currentStyle==="fas"?' selected':'') + '>Solid</option>'
+      + '    <option value="far"' + (currentStyle==="far"?' selected':'') + '>Regular</option>'
+      + '    <option value="fab"' + (currentStyle==="fab"?' selected':'') + '>Brands</option>'
+      + '  </select>'
+      + '  <button class="aa-btn" data-action="close">Close</button>'
+      + '</header>'
+      + '<div class="aa-icon-grid">'
+      + '  <div class="aa-grid"></div>'
+      + '  <div class="aa-empty d-none">No icons match your search.</div>'
+      + '</div>';
 
-        function render() {
-          grid.innerHTML = "";
-          var style = styleSel.value; // fas/far/fab
-          var shown = 0;
-          view.forEach(function (it) {
-            // only render if this icon supports the chosen style
-            if ((style === "fas" && !it.styles.includes("solid")) ||
-                (style === "far" && !it.styles.includes("regular")) ||
-                (style === "fab" && !it.styles.includes("brands"))) return;
+    document.body.appendChild(backdrop);
 
-            var card = document.createElement("button");
-            card.type = "button";
-            card.className = "aa-icon-card";
-            var cls = (style === "fas" ? "fas fa-" + it.key
-                     : style === "far" ? "far fa-" + it.key
-                     : "fab fa-" + it.key);
-            card.innerHTML = '\
-              <i class="' + cls + '" style="font-size:20px"></i>\
-              <div class="aa-icon-name">' + it.key + '</div>\
-              <span class="aa-chip">' + style.toUpperCase() + '</span>';
-            card.addEventListener("click", function () {
-              onPick && onPick({ style: style, name: it.key });
-              close();
-            });
-            grid.appendChild(card);
-            shown++;
-          });
-          empty.classList.toggle("d-none", shown > 0);
-        }
+    var search = modal.querySelector(".aa-search");
+    var styleSel = modal.querySelector(".aa-style");
+    var grid = modal.querySelector(".aa-grid");
+    var empty = modal.querySelector(".aa-empty");
 
-        function applyFilter() {
-          var q = search.value.trim().toLowerCase();
-          view = q ? all.filter(it => it.key.indexOf(q) >= 0) : all;
-          render();
-        }
+    var all = [], view = [];
 
-        function close(){
-          document.removeEventListener("keydown", onKey);
-          backdrop.remove();
-        }
-        function onKey(e){ if (e.key === "Escape") close(); }
+    function render() {
+      grid.innerHTML = "";
+      var style = styleSel.value; // fas/far/fab
+      var shown = 0;
 
-        document.addEventListener("keydown", onKey);
-        modal.querySelector("[data-action='close']").addEventListener("click", close);
-        search.addEventListener("input", applyFilter);
-        styleSel.addEventListener("change", render);
+      view.forEach(function (it) {
+        // Only show card if icon supports chosen style
+        if ((style === "fas" && !it.styles.includes("solid")) ||
+            (style === "far" && !it.styles.includes("regular")) ||
+            (style === "fab" && !it.styles.includes("brands"))) return;
 
-        fetchIcons().then(function(meta){
-          all = Object.keys(meta).map(function(k){ return { key:k, styles: (meta[k].styles || []) }; })
-                                 .sort(function(a,b){ return a.key.localeCompare(b.key); });
-          view = all;
-          render();
-        }).catch(function(e){
-          grid.innerHTML = "<div class=\"aa-empty\">Failed to load icon list.</div>";
-          console.error("Icon metadata load failed", e);
+        var card = document.createElement("button");
+        card.type = "button";
+        card.className = "aa-icon-card";
+        var cls = (style === "fas" ? "fas fa-" + it.key
+                 : style === "far" ? "far fa-" + it.key
+                 : "fab fa-" + it.key);
+        card.innerHTML = ''
+          + '<i class="' + cls + '" style="font-size:20px"></i>'
+          + '<div class="aa-icon-name">' + it.key + '</div>'
+          + '<span class="aa-chip">' + style.toUpperCase() + '</span>';
+        card.addEventListener("click", function () {
+          if (onPick) onPick({ style: style, name: it.key });
+          close();
         });
-      }
+        grid.appendChild(card);
+        shown++;
+      });
 
-      function wireIconPicker() {
-        // Only run on pages that actually have the picker trigger
-        var openBtn = document.getElementById("aa-open-icon-picker");
-        if (!openBtn) return;
+      if (empty) empty.classList.toggle("d-none", shown > 0);
+    }
 
-        var styleInput = document.getElementById("service_icon_style");
-        var nameInput  = document.getElementById("service_icon_name");
-        var preview    = document.getElementById("aa-icon-preview");
+    function applyFilter() {
+      var q = (search.value || "").trim().toLowerCase();
+      view = q ? all.filter(function(it){ return it.key.indexOf(q) >= 0; }) : all;
+      render();
+    }
 
-        function updatePreview(){
-          var s = (styleInput && styleInput.value) || "fas";
-          var n = (nameInput && nameInput.value) || "star";
-          if (preview) preview.className = s + " fa-" + n;
+    function close() {
+      document.removeEventListener("keydown", onKey);
+      backdrop.remove();
+    }
+    function onKey(e) { if (e.key === "Escape") close(); }
+
+    document.addEventListener("keydown", onKey);
+    modal.querySelector("[data-action='close']").addEventListener("click", close);
+    search.addEventListener("input", applyFilter);
+    styleSel.addEventListener("change", render);
+
+    // Load dataset
+    fetchIconsMeta().then(function(meta){
+      all = Object.keys(meta).map(function(k){ return { key:k, styles: (meta[k].styles || []) }; })
+                             .sort(function(a,b){ return a.key.localeCompare(b.key); });
+      view = all;
+      render();
+    }).catch(function(err){
+      grid.innerHTML = "<div class='aa-empty'>Failed to load icon list.</div>";
+      console.error("Icon metadata load failed:", err);
+    });
+  }
+
+  /* =========================================================
+     Wire pickers for Services and Products forms
+  ========================================================= */
+  function wireOne(styleId, nameId, previewId, buttonId) {
+    var styleInput = document.getElementById(styleId);
+    var nameInput  = document.getElementById(nameId);
+    var preview    = document.getElementById(previewId);
+    var btn        = document.getElementById(buttonId);
+    if (!btn || !styleInput || !nameInput) return;
+
+    function updatePreview(){
+      var s = styleInput.value || "fas";
+      var n = nameInput.value  || "star";
+      if (preview) preview.className = s + " fa-" + n;
+    }
+
+    btn.addEventListener("click", function(e){
+      e.preventDefault();
+      openIconPicker({
+        currentStyle: styleInput.value || "fas",
+        onPick: function(icon){
+          styleInput.value = icon.style;
+          nameInput.value  = icon.name;
+          updatePreview();
         }
+      });
+    });
 
-        openBtn.addEventListener("click", function(e){
-          e.preventDefault();
-          openIconPicker({
-            currentStyle: (styleInput && styleInput.value) || "fas",
-            onPick: function(icon){
-              if (styleInput) styleInput.value = icon.style;
-              if (nameInput)  nameInput.value  = icon.name;
-              updatePreview();
-            }
-          });
-        });
+    styleInput.addEventListener("change", updatePreview);
+    nameInput.addEventListener("input", updatePreview);
+    updatePreview();
+  }
 
-        if (styleInput) styleInput.addEventListener("change", updatePreview);
-        if (nameInput)  nameInput.addEventListener("input", updatePreview);
-        updatePreview();
-      }
+  function initIconPickers(){
+    ensureStylesheet(FA_CSS);
+    injectPickerStyles();
+    // Services form
+    wireOne("service_icon_style",  "service_icon_name",  "aa-icon-preview",          "aa-open-icon-picker");
+    // Products form
+    wireOne("product_icon_style",  "product_icon_name",  "aa-product-icon-preview",  "aa-open-product-icon-picker");
+  }
 
-      // Works with ActiveAdmin (fires) and also vanilla layouts
-      function init(){
-        try { wireIconPicker(); } catch(e){ console.error(e); }
-      }
+  /* =========================================================
+     CKEditor 5 (for textareas with .js-ck or .js-ckeditor)
+  ========================================================= */
+  var ckPromise;
+  var editors = new Map();
 
-      document.addEventListener("active_admin:loaded", init);
-      document.addEventListener("DOMContentLoaded", init);
-      document.addEventListener("turbo:load", init);
+  function ensureCK() {
+    if (window.ClassicEditor) return Promise.resolve();
+    if (!ckPromise) {
+      ckPromise = new Promise(function (resolve, reject) {
+        var s = document.createElement("script");
+        s.src = CK_SRC;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+    return ckPromise;
+  }
+
+  function mountEditors(scope) {
+    scope = scope || document;
+    var areas = scope.querySelectorAll("textarea.js-ck, textarea.js-ckeditor");
+    areas.forEach(function (el) {
+      if (editors.has(el)) return;
+      window.ClassicEditor.create(el, {
+        toolbar: ["heading","|","bold","italic","link","|","bulletedList","numberedList","blockQuote","|","undo","redo"]
+      }).then(function (instance) {
+        editors.set(el, instance);
+      }).catch(function (err) {
+        console.error("CKEditor init failed:", err);
+      });
+    });
+  }
+
+  function unmountEditors() {
+    editors.forEach(function (editor) {
+      try { editor.destroy(); } catch(e){}
+    });
+    editors.clear();
+  }
+
+  function initCK() {
+    ensureCK().then(function(){ mountEditors(); });
+  }
+
+  /* =========================================================
+     Boot on AA lifecycle events + plain DOM
+  ========================================================= */
+  function bootAll() {
+    try { initIconPickers(); } catch(e){ console.error(e); }
+    try { initCK(); } catch(e){ console.error(e); }
+  }
+
+  document.addEventListener("active_admin:loaded", bootAll);
+  document.addEventListener("DOMContentLoaded",    bootAll);
+  document.addEventListener("turbo:load",          bootAll);
+  document.addEventListener("turbolinks:load",     bootAll);
+
+  // Cleanup for Turbo/Turbolinks navigations
+  document.addEventListener("turbo:before-render",     unmountEditors);
+  document.addEventListener("turbolinks:before-cache", unmountEditors);
+
+
     })();
   </script>
 
