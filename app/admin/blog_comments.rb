@@ -1,5 +1,5 @@
 ActiveAdmin.register ::Comment, as: "BlogComments" do
-  permit_params :body, :blog_id, :admin_user_id
+  permit_params :body, :blog_id, :admin_user_id , :name, :website, :email
 
   index do
     selectable_column
@@ -20,6 +20,9 @@ ActiveAdmin.register ::Comment, as: "BlogComments" do
       f.input :blog
       f.input :admin_user, collection: ::AdminUser.order(:email)
       f.input :body
+      f.input :website
+      f.input :name
+      f.input :website
     end
     f.actions
   end

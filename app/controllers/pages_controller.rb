@@ -14,7 +14,12 @@ class PagesController < ApplicationController
     @resources = Resource.all
   end
 
-
+  def add_comments
+    @blog = Blog.find(params[:id])
+    @blog.comments << Comment.new(name: params[:name], website: params[:website], email: params[:email], body: params[:body])
+    @blog.save
+    redirect_to "/pages/blog_detail/#{@blog.id}"
+  end
 
   def services
     @services = Service.all
@@ -42,7 +47,7 @@ class PagesController < ApplicationController
   end
 
   def blog_detail
-    @blog = Blog.find_by_title(params[:id])
+    @blog = Blog.find(params[:id])
     render layout: "about" 
   end
 

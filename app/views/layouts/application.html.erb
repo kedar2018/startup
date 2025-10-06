@@ -26,6 +26,24 @@
   <link href="/assets/theme/bootstrap.min.css" rel="stylesheet" />
  <link href="/assets/theme/style.css" rel="stylesheet" />
  <link href="/assets/theme/styleoverride.css" rel="stylesheet" />
+   <script>
+  // Works with plain DOM and Turbo/Turbolinks
+  function wireScrollButtons(){
+    const down = document.getElementById('scrollDown');
+
+    // Smooth scroll helpers
+    const toBottom = () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+
+if (down) down.addEventListener('click', e => {
+  e.preventDefault();
+  const step = Math.round(window.innerHeight * 0.65); // tweak this (e.g., 300)
+  window.scrollBy({ top: step, left: 0, behavior: 'smooth' });
+});
+  }
+
+
+  document.addEventListener('DOMContentLoaded', wireScrollButtons);
+ </script>
 </head>
 
 <body>
@@ -33,6 +51,15 @@
   <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner"></div>
   </div>
+<a href="#" id="scrollDown"
+   class="btn btn-lg btn-primary btn-lg-square rounded position-fixed"
+   style="top: 120px; right: 20px; z-index: 1030;"
+   aria-label="Scroll to bottom">
+  <i class="bi bi-arrow-down"></i>
+</a>
+
+
+
 
   <!-- Topbar -->
   <div class="container-fluid topbar px-5 d-none d-lg-block" style="background: var(--dark);">
