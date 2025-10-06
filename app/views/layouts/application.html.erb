@@ -67,28 +67,50 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto py-0">
-          <a href="/" class="nav-item nav-link active">Home</a>
-          <a href="/pages/about" class="nav-item nav-link">About</a>
-          <a href="/pages/services" class="nav-item nav-link">Services</a>
- <a href="/pages/download_resources" class="nav-item nav-link">Resources</a>
-          <a href="/pages/products" class="nav-item nav-link">Products</a>
-          <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Blog</a>
-            <div class="dropdown-menu m-0"  style="">
-              <a href="/pages/blog" class="dropdown-item">Network Blog</a>
-            </div>
-          </div>
-          <div class="nav-item dropdown" >
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Employee</a>
-            <div class="dropdown-menu m-0" style="">
-              <a href="https://134.199.178.17/gayatri/" class="dropdown-item">Employee</a>
-              <a href="/pages/feature" class="dropdown-item">Our features</a>
-              <a href="/pages/team" class="dropdown-item">Team Members</a>
-              <a href="/pages/testimonials" class="dropdown-item">Testimonial</a>
-              <a href="/pages/quote" class="dropdown-item">Free Quote</a>
-            </div>
-          </div>
-          <a href="/pages/contact" class="nav-item nav-link">Contact</a>
+
+        <%= link_to "Home", "/",
+      class: "nav-item nav-link #{'active' if current_page?('/') || %w[index home].include?(action_name)}" %>
+
+  <%= link_to "About", "/pages/about",
+      class: "nav-item nav-link #{'active' if action_name == 'about'}" %>
+
+  <%= link_to "Services", "/pages/services",
+      class: "nav-item nav-link #{'active' if action_name == 'services'}" %>
+
+  <%= link_to "Resources", "/pages/download_resources",
+      class: "nav-item nav-link #{'active' if action_name == 'download_resources'}" %>
+
+  <%= link_to "Products", "/pages/products",
+      class: "nav-item nav-link #{'active' if action_name == 'products'}" %>
+
+  <div class="nav-item dropdown">
+    <a href="#" class="nav-link dropdown-toggle <%= 'active' if %w[blog].include?(action_name) %>"
+       data-bs-toggle="dropdown">Blog</a>
+    <div class="dropdown-menu m-0">
+      <%= link_to "Network Blog", "/pages/blog",
+          class: "dropdown-item #{'active' if action_name == 'blog'}" %>
+    </div>
+  </div>
+
+  <div class="nav-item dropdown">
+    <a href="#" class="nav-link dropdown-toggle <%= 'active' if %w[feature team testimonials quote].include?(action_name) %>"
+       data-bs-toggle="dropdown">Employee</a>
+    <div class="dropdown-menu m-0">
+      <a href="https://134.199.178.17/gayatri/" class="dropdown-item" target="_blank" rel="noopener">Employee</a>
+      <%= link_to "Our features", "/pages/feature",
+          class: "dropdown-item #{'active' if action_name == 'feature'}" %>
+      <%= link_to "Team Members", "/pages/team",
+          class: "dropdown-item #{'active' if action_name == 'team'}" %>
+      <%= link_to "Testimonial", "/pages/testimonials",
+          class: "dropdown-item #{'active' if action_name == 'testimonials'}" %>
+      <%= link_to "Free Quote", "/pages/quote",
+          class: "dropdown-item #{'active' if action_name == 'quote'}" %>
+    </div>
+  </div>
+
+  <%= link_to "Contact", "/pages/contact",
+      class: "nav-item nav-link #{'active' if action_name == 'contact'}" %>
+
         </div>
         <button type="button" class="btn btnsearch ms-3" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
       </div>
