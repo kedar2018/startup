@@ -68,11 +68,11 @@
             $('.back-to-top').fadeOut('slow');
         }
     });
-    $('.back-to-top').click(function () {
+/*    $('.back-to-top').click(function () {
         $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
         return false;
     });
-
+*/
 
     // Testimonials carousel
     $(".testimonial-carousel").owlCarousel({
@@ -149,3 +149,35 @@ $('.vendor-carousel').owlCarousel({
 */
 })(jQuery);
 
+
+
+
+// Up/Down buttons with native smooth scroll (no jQuery .animate)
+(function () {
+
+function STEP () {
+  const v = Math.round(window.innerHeight * 1.2); // 120% of viewport
+  return Math.max(400, Math.min(1400, v));        // clamp 400–1400px
+}
+  function toggleButtons() {
+    var y   = window.scrollY || document.documentElement.scrollTop;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+
+    $('.back-to-top')[y > 100 ? 'fadeIn' : 'fadeOut']('slow');
+    $('.scroll-down')[y < max - 100 ? 'fadeIn' : 'fadeOut']('slow');
+  }
+
+  // Clicks: native smooth scroll
+  $(document).on('click', '.back-to-top', function (e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  $(document).on('click', '.scroll-down', function (e) {
+    e.preventDefault();
+    window.scrollBy({ top: STEP(), left: 0, behavior: 'smooth' });
+  });
+
+  $(window).on('scroll resize', toggleButtons);
+  $(toggleButtons); // initial
+})();
