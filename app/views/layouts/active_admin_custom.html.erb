@@ -21,6 +21,43 @@
     return t && t.content;
   }
 
+  // Upload to Rails (Active Storage). Expects controller at POST /ckeditor/uploads returning { url: "..." }.
+  function uploadToRails(file) {
+    const data = new FormData();
+    data.append("upload", file);
+    return fetch("/ckeditor/uploads", {
+      method: "POST",
+      headers: { "X-CSRF-Token": csrfToken() },
+      body: data
+    }).then(function (r) {
+      if (!r.ok) throw new Error("Upload failed");
+      return r.json();
+    }).then(function (json) {
+      return json.url;
+    });
+  }
+
+  // Convert dropped/pasted non-image files into links after upload.
+  function FilesAsLinksPlugin(editor) {
+    const viewDoc = editor.editing.view.document;
+    viewDoc.on("clipboardInput", function (_evt, data) {
+      const dt = data && data.dataTransfer;
+      if (!dt || !dt.files || !dt.files.length) return;
+      const files = Array.from(dt.files).filter(function (f) { return !/^image\//i.test(f.type); });
+      if (!files.length) return;
+
+      files.forEach(function (file) {
+        uploadToRails(file).then(function (url) {
+          editor.model.change(function (writer) {
+            const text = writer.createText(file.name, { linkHref: url });
+            editor.model.insertContent(text, editor.model.document.selection);
+            writer.insertText(" ", editor.model.document.selection.getFirstPosition());
+          });
+        }).catch(function (e) { console.error("File upload failed:", e); });
+      });
+    });
+  }
+
   function initCkEditors(scope){
     const root  = scope || document;
     const nodes = root.querySelectorAll('textarea.js-ck:not([data-cked])');
@@ -32,6 +69,7 @@
       CKEDITOR.ClassicEditor.create(el, {
         toolbar: {
           items: [
+            'sourceEditing','|',
             'undo','redo','|','findAndReplace','selectAll','removeFormat','|',
             'heading','|',
             'bold','italic','underline','strikethrough','code','subscript','superscript','|',
@@ -54,36 +92,30 @@
           ]
         },
 
-        list: { properties: { styles: true, startIndex: true, reversed: true } },
+        list: { properties: { styles: true, startIndex: true, reversed: true} },
         link: { decorators: { addTargetToExternalLinks: true } },
         fontSize: { options: [10,12,14,'default',18,20,24,30,36] },
         htmlSupport: { allow: [ { name: /.*/, attributes: true, classes: true, styles: true } ] },
         htmlEmbed: { showPreviews: true },
 
+        // Images: CKEditor simple upload → Rails endpoint
         simpleUpload: {
-          uploadUrl: '/admin/uploads',
+          uploadUrl: '/ckeditor/uploads',
           headers: { 'X-CSRF-Token': csrfToken() }
         },
 
-        // REMOVE ALL cloud/commercial plugins so nothing requires CloudServices
+        // Extra: non-image file uploads become links
+        extraPlugins: [ FilesAsLinksPlugin ],
+
         removePlugins: [
-          // Cloud / storage / upload suites
           'CloudServices',
           'CKBox','CKBoxUtils','CKBoxImageEdit',
           'CKFinder','CKFinderUploadAdapter','EasyImage',
-
-          // Collaboration / paywalled
           'RealTimeCollaborativeComments','RealTimeCollaborativeTrackChanges','RealTimeCollaborativeRevisionHistory',
           'PresenceList','Comments','TrackChanges','TrackChangesData','RevisionHistory',
-
-          // Export/import paywalled
           'ExportPdf','ExportWord','ImportWord',
-
-          // Premium UX features that trigger license errors
           'AIAssistant','MultiLevelList','TableOfContents','FormatPainter','Template',
           'SlashCommand','PasteFromOfficeEnhanced','CaseChange','WProofreader','MathType','Pagination',
-
-          // Needs dedicated container; remove unless you wire it
           'DocumentOutline','DocumentOutlineUI'
         ]
       })
@@ -100,10 +132,8 @@
   }
   document.addEventListener('turbo:load', function(){ initCkEditors(document); });
   document.addEventListener('page:load',  function(){ initCkEditors(document); });
-
-
-
 </script>
+
 
  <%= stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css",
                           crossorigin: "anonymous", referrerpolicy: "no-referrer" %>

@@ -18,6 +18,10 @@ Rails.application.routes.draw do
   get 'pages/download_resources'
   post "pages/add_comments/:id", to: "pages#add_comments"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # config/routes.rb
+  post "/ckeditor/uploads", to: "ckeditor_uploads#create"
+
+
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
