@@ -2,9 +2,9 @@
 <div class="resources-grid">
   <% @resources.each do |r| %>
     <article class="resource-card">
-      <h2 class="resource-title">
+      <h4 class="resource-title">
         <%= link_to r.title ,"#" %>
-      </h2>
+      </h4>
 
       <p class="resource-date"><%= r.created_at.strftime("%d %b %Y") %></p>
 
