@@ -206,7 +206,7 @@ img.shadow, img.shadow-sm, img.shadow-lg {
 /* Buttons inside the caption: solid fills for contrast */
 .carousel-caption .btn-primary {
   background-color: var(--logo-color) !important;
-  border-color: var(--primary) !important;
+  /*border-color: var(--primary) !important;*/
   color: #fff !important;
   box-shadow: none !important;
 }
@@ -221,14 +221,14 @@ img.shadow, img.shadow-sm, img.shadow-lg {
 .carousel-caption .btn-outline-light,
 .carousel-caption .btn-light {
   color: #fff !important;
-  border-color:  var(--primary) !important;
+  border-color:   var(--logo-color) !important;
   background: var(--logo-color);
 }
 .carousel-caption .btn-outline-light:hover,
 .carousel-caption .btn-light:hover {
   background: var(--logo-color) !important;
-  border-color: var(--primary) !important;
-  color: #fff !important;
+  border-color:  var(--logo-color) !important;
+  color: #000 !important;
 }
 
 /* Links inside caption should use your primary brand color */
@@ -282,8 +282,9 @@ img.shadow, img.shadow-sm, img.shadow-lg {
   border-bottom: 1px solid rgba(255,255,255,.35);
 }
 .carousel-caption a:hover { 
-  color: var(--primary) !important; 
-  border-bottom-color: var(--primary);
+  color: #000 !important; 
+  /*border-bottom-color: var(--primary);*/
+ box-shadow:  0 0 0 .25rem rgba(var(--logo-color-rgb), .5) !important;; 
 }
 
 /* Indicators: visible over photos */
