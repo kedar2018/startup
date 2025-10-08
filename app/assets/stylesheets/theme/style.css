@@ -129,7 +129,7 @@ h6,
     position: relative;
     margin-left: 25px;
     padding: 35px 0;
-    color: var(--logo-color);;
+    color: var(--logo-color) !important;
     font-size: 18px;
     font-weight: 600;
     outline: none;
