@@ -189,23 +189,43 @@
   <%=yield%>
 
   <!-- Vendors -->
-  <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-    <div class="container py-5 mb-5">
-      <div class="bg-white-image">
-        <div class="owl-carousel vendor-carousel">
-          <img alt="DLink" src="<%= asset_path '/assets/d-link-logo.webp' %>" />
-          <img alt="Acer" src="<%= asset_path '/assets/acer-logo.webp' %>" />
-          <img alt="Cisco" src="<%= asset_path '/assets/cisco-logo.webp' %>" />
-          <img alt="Ingram" src="<%= asset_path '/assets/ingram-logo.webp' %>" />
-          <img alt="Iw" src="<%= asset_path '/assets/iw-logo-white' %>" />
-          <img alt="Oracle" src="<%= asset_path '/assets/oracle-logo.webp' %>" />
-          <img alt="Redington" src="<%= asset_path '/assets/redington-logo.webp' %>" />
-          <img alt="Ss" src="<%= asset_path '/assets/ss-logo-white.webp' %>" />
-          <img alt="Wazuh" src="<%= asset_path '/assets/wazuh-logo-white.webp' %>" />
-        </div>
-      </div>
+<div class="container-fluid py-5 wow fadeInUp " data-wow-delay="0.1s" style="margin-bottom:0px  !important;padding-bottom: 0px !important">
+  <div class="container py-5 mb-5" style="margin-bottom:0px  !important; padding-bottom: 0%  !important;">
+    <div class="bg-white-image background-overlay" >
+<div class="logo-marquee">
+  <div class="logo-track">
+    <% logos = [
+      {alt: "D-Link",     src: asset_path("/assets/d-link-logo.webp")},
+      {alt: "Acer",       src: asset_path("/assets/acer-logo.webp")},
+      {alt: "Cisco",      src: asset_path("/assets/cisco-logo.webp")},
+      {alt: "Ingram",     src: asset_path("/assets/ingram-logo.webp")},
+      {alt: "IW",         src: asset_path("/assets/iw-logo-white.webp")},
+      {alt: "Oracle",     src: asset_path("/assets/oracle-logo.webp")},
+      {alt: "Redington",  src: asset_path("/assets/redington-logo.webp")},
+      {alt: "SS",         src: asset_path("/assets/ss-logo-white.webp")},
+      {alt: "Wazuh",      src: asset_path("/assets/wazuh-logo-white.webp")}
+    ] %>
+
+    <!-- strip A -->
+    <div class="logo-strip" aria-hidden="false">
+      <% logos.each do |l| %>
+        <img class="vendor-logo" alt="<%= l[:alt] %>" src="<%= l[:src] %>">
+      <% end %>
+    </div>
+
+    <!-- strip B (duplicate for seamless loop) -->
+    <div class="logo-strip" aria-hidden="true">
+      <% logos.each do |l| %>
+        <img class="vendor-logo" alt="" src="<%= l[:src] %>">
+      <% end %>
     </div>
   </div>
+</div>
+
+    </div>
+  </div>
+</div>	
+
 
 
   <!-- Footer -->
@@ -350,6 +370,63 @@ document.addEventListener('DOMContentLoaded', mountFlash);
 document.addEventListener('turbo:load', mountFlash); // if using Turbo
 
 </script>
+<style>
+
+/* ——— marquee container ——— */
+.logo-marquee {
+  --logo-height: 110px;          /* ← adjust logo size */
+  --gap: 45px;                   /* ← space between logos */
+  --speed: 30s;                  /* ← lower = faster */
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 12px 0;
+}
+
+/* ——— moving track ——— */
+.logo-track {
+  display: flex;
+  width: max-content;
+  gap: var(--gap);
+  animation: marquee-scroll var(--speed) linear infinite;
+}
+
+/* two identical strips, back-to-back */
+.logo-strip {
+  display: inline-flex;
+  gap: var(--gap);
+}
+
+/* logos */
+.vendor-logo {
+  height: var(--logo-height);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* pause on hover (optional) */
+.logo-marquee:hover .logo-track {
+  animation-play-state: paused;
+}
+
+/* make it slightly smaller on phones (optional) */
+@media (max-width: 576px) {
+  .logo-marquee { --logo-height: 80px; --gap: 28px; --speed: 24s; }
+}
+
+/* reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .logo-track { animation: none; }
+}
+
+/* the secret sauce */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); } /* exactly half because we duplicated */
+}
+</style>
 </body>
 </html>
 
